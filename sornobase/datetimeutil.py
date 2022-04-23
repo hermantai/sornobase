@@ -1,10 +1,4 @@
-"""datetimeutil converts between different datetime related objects.
-
-In this module, make sure we don't use the tzinfo
-parameter in the constructor datetime.datetime. Instead,
-always gets a timezone from pytz, then do localize (and
-normalize after that).
-"""
+"""datetimeutil converts between different datetime related objects."""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -27,15 +21,14 @@ LOCAL_TIMEZONE = tzlocal.get_localzone()
 # Mon Jan 2 15:04:05 -0700 MST 2006
 _mst_timezone = pytz.timezone("US/Mountain")
 GO_REFERENCE_TIME = _mst_timezone.normalize(
-    _mst_timezone.localize(
-        datetime.datetime(
-            2006,
-            1,
-            2,
-            15,
-            4,
-            5,
-        )
+    datetime.datetime(
+        2006,
+        1,
+        2,
+        15,
+        4,
+        5,
+        tzinfo=_mst_timezone
     )
 )
 
@@ -57,14 +50,14 @@ def real_localize(dt, tz):
         A datetime object which is a clone of the given dt, with the given
         timezone info attached.
     """
-    return tz.normalize(tz.localize(dt))
+    return dt.replace(tzinfo=tz)
 
 
 def convert_timezone(dt, tz=LOCAL_TIMEZONE):
     """Converts a datetime object to a specific timezone.
 
     By default, the datetime object is converted into local timezone."""
-    return tz.normalize(dt.astimezone(tz))
+    return dt.astimezone(tz)
 
 
 def datetime_to_timestamp(dt):
@@ -156,10 +149,10 @@ def guess_local_datetime(s):
     if dt.tzinfo:
         return dt.astimezone(LOCAL_TIMEZONE)
     else:
-        return LOCAL_TIMEZONE.localize(dt)
+        return dt.replace(tzinfo=LOCAL_TIMEZONE)
 
 
-def strftime(format, mixed, localize=False):
+def strftime(format, mixed):
     """Formats a time to a string.
 
     Just like time.strftime

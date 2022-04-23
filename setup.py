@@ -25,7 +25,7 @@ with open("README.rst", "r") as f:
 
 setup(
     name="sornobase",
-    version="0.1.2",
+    version="0.2",
     description="Herman Tai's base library for common utilities",
     long_description=readme_text,
     author="Herman Tai",
