@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sornobase"  # Replace with your package name
-version = "0.3.0"  # Replace with your version
+version = "0.3.1"  # Replace with your version
 description = "Herman Tai's base library for common utilities"
 authors = [{name = "Herman Tai", email = "htaihm@gmail.com"}]
 
