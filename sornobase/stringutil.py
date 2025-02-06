@@ -22,10 +22,9 @@ def u(s):
     Converts s to unicode with utf-8 encoding if it is not already a unicode.
     Leave it as is otherwise.
     """
-    if type(s) == unicode:
-        return s
-    else:
+    if isinstance(s, bytes):
         return s.decode("utf8")
+    return s
 
 
 def format_with_default_value(handle_missing_key, s, d):
