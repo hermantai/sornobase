@@ -1,0 +1,38 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [created] # Trigger on new release creation
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Needed for trusted publishing
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Or specify a version like '3.9'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip build twine
+
+      - name: Build distribution
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi@v1
+        with:
+          repository-url: https://upload.pypi.org/legacy/ # Or https://test.pypi.org/legacy/ for testing
+          distributions: dist/*
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: dist/*
